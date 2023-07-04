@@ -49,3 +49,4 @@ alter table trans_cust rename to perm_table;
 
 --check for the 'kind' column in the show tables result
 show tables like 'perm_table';
+

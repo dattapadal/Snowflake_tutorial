@@ -66,3 +66,22 @@ list @%customer;
 -- |------+------+-----+---------------|
 -- +------+------+-----+---------------+
 -- 0 Row(s) produced. Time Elapsed: 0.141s
+
+-- check the load history: This view does not return the history of data loaded using snowpipe and has only 14 days history 
+select SCHEMA_NAME, FILE_NAME, TABLE_NAME, LAST_LOAD_TIME, STATUS, ROW_COUNT, ROW_PARSED from information_schema.load_history where table_name = 'CUSTOMER';
+-- +-------------+-----------------------------------------+------------+-------------------------------+--------+-----------+------------+
+-- | SCHEMA_NAME | FILE_NAME                               | TABLE_NAME | LAST_LOAD_TIME                | STATUS | ROW_COUNT | ROW_PARSED |
+-- |-------------+-----------------------------------------+------------+-------------------------------+--------+-----------+------------|
+-- | PUBLIC      | tables/363792319995914/customers.csv.gz | CUSTOMER   | 2023-07-03 20:45:43.428 -0700 | LOADED |       100 |        100 |
+-- +-------------+-----------------------------------------+------------+-------------------------------+--------+-----------+------------+
+
+-- copy history: This includes data loaded using snowpipe as well.
+select 
+	FILE_NAME, STAGE_LOCATION, LAST_LOAD_TIME, ROW_COUNT, ROW_PARSED, FILE_SIZE, STATUS, TABLE_CATALOG_NAME, TABLE_SCHEMA_NAME, TABLE_NAME
+from table(information_schema.copy_history(TABLE_NAME=>'CUSTOMER', START_TIME=> DATEADD(hours, -1, CURRENT_TIMESTAMP())));
+-- +------------------+-------------------------+-------------------------------+-----------+------------+-----------+--------+--------------------+-------------------+------------+
+-- | FILE_NAME        | STAGE_LOCATION          | LAST_LOAD_TIME                | ROW_COUNT | ROW_PARSED | FILE_SIZE | STATUS | TABLE_CATALOG_NAME | TABLE_SCHEMA_NAME | TABLE_NAME |
+-- |------------------+-------------------------+-------------------------------+-----------+------------+-----------+--------+--------------------+-------------------+------------|
+-- | customers.csv.gz | tables/363792319995914/ | 2023-07-03 20:45:43.428 -0700 |       100 |        100 |      6192 | Loaded | DEMO_DATA_LOADING  | PUBLIC            | CUSTOMER   |
+-- +------------------+-------------------------+-------------------------------+-----------+------------+-----------+--------+--------------------+-------------------+------------+
+
