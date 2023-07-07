@@ -39,7 +39,7 @@ select system$ESTIMATE_SEARCH_OPTIMIZATION_COSTS('lineitem_so');
 alter table lineitem_so add search optimization;
 --observe the column search_optimization, it should be ON and the search_optimization_progress should be 100
 show tables like 'lineitem_so';
-
+alter table lineitem_so drop search optimization;
 ALTER SESSION SET USE_CACHED_RESULT = FALSE;
 Select * from lineitem_no_so where l_orderkey='2412266214' limit 10; 
 -- Warehouse 'MY_6XL_WH' cannot be resumed because resource monitor '{1}' has exceeded its quota

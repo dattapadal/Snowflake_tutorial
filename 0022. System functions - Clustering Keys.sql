@@ -32,6 +32,22 @@ select system$clustering_information('LINEITEM');
 --   }
 -- }
 
+-- Set context
+USE ROLE ACCOUNTADMIN;
+USE DATABASE SNOWFLAKE;
+USE SCHEMA ACCOUNT_USAGE;
+
+-- Monitoring Automatic Clustering serverless feature costs 
+SELECT 
+  START_TIME, 
+  END_TIME, 
+  CREDITS_USED, 
+  NUM_BYTES_RECLUSTERED,
+  TABLE_NAME, 
+  SCHEMA_NAME,
+  DATABASE_NAME
+FROM AUTOMATIC_CLUSTERING_HISTORY;
+
 show tables like '%line%';
 
 -- clear the cache; generally used to wipe the data for query benchmarking
