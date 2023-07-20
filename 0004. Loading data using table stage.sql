@@ -16,7 +16,7 @@ create or replace table customer (
 );
 
 --Table stage 
--- each stage has its own table stage created by default, which we can query using LIST @%<table_name>
+-- each table has its own table stage created by default, which we can query using LIST @%<table_name>
 
 --it will be empty for the first time and hence there wont be any results. 
 List @%customer;
